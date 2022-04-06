@@ -1,0 +1,111 @@
+using gold.structures.automaton.*
+using gold.visualization.automaton.*
+
+procedure main(args:String[]) begin
+	
+	Q := (0‥6) × (0‥1) × (0‥1) × (0‥1) × (0‥1) × (0‥1) × (0‥1) × (0‥1) ∪ {⟨'e','e','e','e','e','e','e','e'⟩}
+	Σ := ('A'‥'Z') ∪ ('a'‥'e') ∪ {'∗','/',';','#', '%'}
+	q := ⟨0,0,0,0,0,0,0,0⟩
+	F := {5,6} × {1} × {1} × {0,1} × {0,1} × {0,1} × {0,1} × {0,1}
+		
+	A : GDeterministicAutomaton := GDeterministicAutomaton(Q, Σ, q, F, δ)
+	GAutomataFrame.show(A)
+end
+
+
+function δ(⟨tamCadena,haySimbolo,hayMayuscula,hayA,hayB,hayC,hayD,hayE⟩, s) begin
+	
+	error_state = ⟨'e','e','e','e','e','e','e','e'⟩
+	
+	if ⟨tamCadena,haySimbolo,hayMayuscula,hayA,hayB,hayC,hayD,hayE⟩ != error_state then
+		tamCadena = tamCadena + 1
+		
+	if tamCadena > 6 then
+		return error_state
+		
+	end
+	
+	if haySimbolo == 0 && (s == '∗'|| s == '/'|| s==';'|| s =='#'|| s== '%')  then
+		haySimbolo = 1
+		return ⟨tamCadena,haySimbolo,hayMayuscula,hayA,hayB,hayC,hayD,hayE⟩
+		
+	end
+	
+	if haySimbolo == 1 && (s == '∗'|| s == '/'|| s==';'|| s =='#'|| s== '%')  then
+		return error_state
+		
+	end
+		
+	if hayMayuscula == 1 && tamCadena <= 6 && s in ('A'‥'Z')   then
+		return ⟨tamCadena,haySimbolo,hayMayuscula,hayA,hayB,hayC,hayD,hayE⟩
+	
+	end
+		
+	if hayMayuscula == 0  && s in ('A'‥'Z') then
+		hayMayuscula = 1
+		return ⟨tamCadena,haySimbolo,hayMayuscula,hayA,hayB,hayC,hayD,hayE⟩
+		
+	end
+	
+	if hayA ==1 && s == 'a'  then
+		return error_state
+		
+	end
+		
+	if hayA == 0 && s== 'a'  then
+		hayA = 1
+		return ⟨tamCadena,haySimbolo,hayMayuscula,hayA,hayB,hayC,hayD,hayE⟩
+		
+	end
+	
+	if hayB ==1 && s == 'b'  then
+		return error_state
+	
+	end
+	
+	if hayB == 0 && s== 'b' then
+		hayB = 1
+		return ⟨tamCadena,haySimbolo,hayMayuscula,hayA,hayB,hayC,hayD,hayE⟩
+		
+	end
+		
+	if hayC ==1 && s == 'c'  then
+		return error_state
+	
+	end
+	
+	if hayC == 0 && s== 'c' then
+		hayC = 1
+		return ⟨tamCadena,haySimbolo,hayMayuscula,hayA,hayB,hayC,hayD,hayE⟩
+		
+	end
+		
+	if hayD ==1 && s == 'd' then
+		return error_state
+		
+	end
+	
+	if hayD == 0 && s== 'd' then
+		hayD = 1
+		return ⟨tamCadena,haySimbolo,hayMayuscula,hayA,hayB,hayC,hayD,hayE⟩
+		
+	end
+	
+	if hayE == 1 && s == 'e' then
+		return error_state
+		
+	end
+	
+	if hayE == 0 && s== 'e'  then
+		hayE = 1	
+		return ⟨tamCadena,haySimbolo,hayMayuscula,hayA,hayB,hayC,hayD,hayE⟩
+		
+	end
+	
+	else 
+		return error_state
+		
+	end
+		
+	
+end
