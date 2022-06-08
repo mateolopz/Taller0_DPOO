@@ -1,0 +1,96 @@
+
+
+
+
+//Silvia Takahashi
+// UNIVERSIDAD DE LOS ANDES
+//   Coder: 
+//  Reads  strings of  (a‥z) and spaces
+//  outputs  the same string  shifting each letter 1  % 26 .  
+//  a-b
+// b-c
+// ‥.
+// y-z
+// z - a
+
+
+using gold.structures.automaton.*
+using gold.visualization.automaton.*
+using gold.structures.map.*
+
+
+
+procedure main ( args : String [ ] ) begin
+	m = createTransducer ( ) 
+	//vGAutomataFrame.show ( m ) 
+	test( m)
+end
+
+toSet(C) :=  {x|  x in C}
+procedure test(M:IAutomaton) begin
+	var sc:java.util.Scanner(System.$in)
+	isTransducer:=ITransducer.class.isInstance(M)
+	while true do
+		print "----------------------------"
+		print "Input String  empty string to exit): "
+		
+		string:=sc.nextLine()
+		if string = "" then break end
+		
+		inputM = toSet(M.getAlphabet())
+		
+		if M.getAlphabet().containsAll(string) then
+			result:=M.acceptsString(string)
+			print "The string was "+(result?"accepted!":"rejected.")+(isTransducer?". Output:":"")
+			if isTransducer then
+				print (M as ITransducer).getOutputString()
+			end
+		else 
+			print  "Input contains invalid symbols: "+ toSet(string) \ inputM
+		end
+end
+	print "Execution terminated"
+end
+
+
+function createTransducer ( ) : ITransducer begin
+
+	Q :=  {0}
+
+	Σ := ( 'a' ‥ 'z' ) ∪ {' '}
+	Out := ( 'a' ‥ 'z' ) ∪ {' '}
+
+	q₀ := 0
+	F := Q
+	return GDeterministicTransducer ( Q , Σ , Out , q₀ , F , δ , g , h )
+end
+
+function δ ( q , s ) begin
+	
+		return q
+end	
+
+function h ( q , s ) begin
+	
+		return shiftSymbol(s,1)
+end	
+
+
+function g ( q ) begin
+	return λ
+end
+
+function shiftSymbol(symbol, shift) begin
+	var  r : Character
+   
+   
+  	if symbol in ('a'‥'z') then
+	r:= 'a' + (symbol -'a'+ shift)% 26
+	elseif symbol in ('A'‥'Z') then
+	r:= 'A' + (symbol -'A'+ shift)% 26
+	elseif  symbol in ('0'‥'9') then
+	r:= '0' + (symbol -'0'+ shift)% 10
+	else r:= symbol
+	end		
+	return r
+end
